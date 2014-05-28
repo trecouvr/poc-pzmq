@@ -1,9 +1,12 @@
 import argparse
 import logging
+import os
+import sys
 
 import zmq
 
-import core
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import pzmq
 from gen import message_pb2 as gen
 import service
 
@@ -40,7 +43,7 @@ def main():
 
     url = args.connect
 
-    client = core.Client(service.DummyService(), url)
+    client = pzmq.Client(service.DummyService(), url)
 
     call_echo(client)
     call_add(client)

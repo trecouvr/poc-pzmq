@@ -1,17 +1,20 @@
 import argparse
 import logging
 import threading
+import os
+import sys
 
 import zmq
 
-import core
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import pzmq
 import service
 
 
 logger = logging.getLogger(__name__)
 
 
-class Worker(core.Worker):
+class Worker(pzmq.Worker):
     def __init__(self, i, *args, **kw):
         super(Worker, self).__init__(*args, **kw)
         self.i = i
@@ -41,7 +44,7 @@ def main():
 
     ctx = zmq.Context()
 
-    broker = core.Broker(url, 'inproc://workers', ctx)
+    broker = pzmq.Broker(url, 'inproc://workers', ctx)
 
     worker_jobs = []
     for i in range(n_workers):
