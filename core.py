@@ -57,8 +57,9 @@ class Worker(object):
         self.socket = self.ctx.socket(zmq.REP)
         self.socket.connect(self.broker_url)
         while True:
-            method_name, b_input = self.socket.recv_multipart()
+            b_method_name, b_input = self.socket.recv_multipart()
             try:
+                method_name = b_method_name.decode('utf8')
                 method = self.service_definition.get_method(method_name)
                 b_output = self.call_method(method, b_input)
                 status_code = b'ok'
